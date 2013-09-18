@@ -21,7 +21,6 @@ namespace Physics_Game
             startPosition = initial_position;
             velocity = initial_velocity;
             size = initial_size;
-            mass = _mass;
 
             rotationAngle = 0;
             origin = new Vector2(size.X / 2, size.Y / 2);
@@ -39,13 +38,7 @@ namespace Physics_Game
 
         public void Update()
         {
-            getInput();
-
-            ApplyFriction();
-            velocity = Vector2.Add(velocity, acceleration);
-            velocity = Vector2.Clamp(velocity, new Vector2(-10f, -10f), new Vector2(10f, 10f));
-            acceleration = new Vector2(0, 0);
-
+            getInput();            
            
             position += velocity; 
             
@@ -60,27 +53,9 @@ namespace Physics_Game
 
         }
 
-        public void ApplyForce(Vector2 force)
-        {
-            force = Vector2.Divide(force, mass);
-            acceleration = Vector2.Add(acceleration, force);
+       
 
-        }
-
-        public void ApplyFriction()
-        {
-            //the coefficient of friction
-            float c = 0.2f;
-            //the normal force (e.g. a road pushing back against a vehicle)
-            float normal = 1;
-            float frictionMag = c * normal;
-
-            Vector2 friction = velocity;
-            friction = Vector2.Multiply(friction, -1.0f);
-            friction.Normalize();
-            friction = Vector2.Multiply(friction, frictionMag);
-            ApplyForce(friction);
-        }
+        
 
         public Rectangle getBounds()
         {
@@ -93,14 +68,46 @@ namespace Physics_Game
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                ApplyForce(new Vector2(1.0f, 0f));
+                if (velocity.X < 0)
+                {
+                    velocity += new Vector2(0.5f, 0f);
+
+                }
+                else
+                {
+                    velocity += new Vector2(0.1f, 0f);
+                }
             }
-            
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                ApplyForce(new Vector2(-1.0f, 0f));
+                if (velocity.X > 0)
+                {
+                    velocity += new Vector2(-0.5f, 0f);
 
+                }
+                else
+                {
+                    velocity += new Vector2(-0.1f, 0f);
+                }
+
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Left) && Keyboard.GetState().IsKeyUp(Keys.Right))
+            {
+                if (velocity.X < 0.1 && velocity.X > -0.1)
+                {
+                    velocity = Vector2.Zero;
+                }
+                else if (velocity.X > 0.1)
+                {
+                    velocity += new Vector2(-0.3f, 0f);
+                }
+                else if (velocity.X < -0.1)
+                {
+                    velocity += new Vector2(0.3f, 0f);
+                }
+                
             }
 
         }
