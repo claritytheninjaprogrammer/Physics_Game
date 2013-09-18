@@ -16,12 +16,13 @@ namespace Physics_Game
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        /*    Moved to Globals.cs
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        SpriteBatch spriteBatch; */
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            StaticVar.graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -34,7 +35,12 @@ namespace Physics_Game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            StaticVar.ScreenWidth = StaticVar.graphics.PreferredBackBufferWidth;
+            StaticVar.ScreenHeight = StaticVar.graphics.PreferredBackBufferHeight;
 
+            StaticVar.playerManager = new PlayerManager(this);
+            
+            StaticVar.playerManager.Initialize();
             base.Initialize();
         }
 
@@ -45,7 +51,7 @@ namespace Physics_Game
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            StaticVar.spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
         }
@@ -70,6 +76,7 @@ namespace Physics_Game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            StaticVar.playerManager.Update(gameTime);
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -82,6 +89,10 @@ namespace Physics_Game
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            StaticVar.spriteBatch.Begin();
+            StaticVar.playerManager.Draw(gameTime);
+            StaticVar.spriteBatch.End();
 
             // TODO: Add your drawing code here
 
