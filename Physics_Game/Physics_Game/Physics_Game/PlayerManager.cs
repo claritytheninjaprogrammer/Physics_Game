@@ -31,14 +31,14 @@ namespace Physics_Game
         /// </summary>
         public override void Initialize()
         {
-            player1 = new Player(new Vector2(StaticVar.ScreenWidth / 2, StaticVar.ScreenHeight /2), new Vector2(0.01f, 0), new Vector2(50, 10), 50);
+            player1 = new Player(new Vector2(StaticVar.ScreenWidth / 2, StaticVar.ScreenHeight - 50), new Vector2(0.01f, 0), new Vector2(50, 10), 50);
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            player1.LoadContent(GraphicsDevice, @"Content/whitepx.tga");
+            player1.LoadContent(GraphicsDevice, @"Content/whitepx.jpg");
 
             base.LoadContent();
         }
@@ -49,7 +49,7 @@ namespace Physics_Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            player1.Update();
+            player1.Update(gameTime);
 
             base.Update(gameTime);
         }

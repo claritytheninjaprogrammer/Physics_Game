@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameObject.cs" />
+    <Compile Include="Gun.cs" />
     <Compile Include="StaticVar.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PlayerManager.cs" />

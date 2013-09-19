@@ -15,6 +15,10 @@ namespace Physics_Game
 {
     class Player : GameObject
     {
+        bool gunsActive = false;
+        List<Gun> listOfGuns = new List<Gun>();
+
+        GraphicsDevice graphicsDevice;
 
         public Player(Vector2 initial_position, Vector2 initial_velocity, Vector2 initial_size, float _mass)
         {
@@ -28,20 +32,29 @@ namespace Physics_Game
 
         }
 
-        public void LoadContent(GraphicsDevice graphicsDevice, string texture_path)
+        public void LoadContent(GraphicsDevice gDevice, string texture_path)
         {
-            using (FileStream fileStream = new FileStream(@"Content/whitepx.jpg", FileMode.Open))
+            using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
             {
-                texture = Texture2D.FromStream(graphicsDevice, fileStream);
+                texture = Texture2D.FromStream(gDevice, fileStream);
             }
+            graphicsDevice = gDevice;
         }
 
-        public void Update()
+        public void Update(GameTime gameTime)
         {
             getInput();
             CheckCollisionScreenBounds();
            
             position += velocity;
+
+            if (gunsActive)
+            {
+                foreach (Gun g in listOfGuns)
+                {
+                    g.Update(gameTime);
+                }
+            }
         }
 
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, GameTime gameTime)
@@ -50,6 +63,13 @@ namespace Physics_Game
             //r = new Rectangle((int)position.X, (int)position.Y, r.Width, r.Height);
             spriteBatch.Draw(texture, r, null, Color.White);
 
+            if (gunsActive)
+            {
+                foreach (Gun g in listOfGuns)
+                {
+                    g.Draw(graphicsDevice, spriteBatch, gameTime);
+                }
+            }
         }
 
         public bool CheckCollisionScreenBounds()
@@ -123,9 +143,29 @@ namespace Physics_Game
                 
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.G))
+            {
+                initialiseGuns();
+            }
+
         }
 
+        public void initialiseGuns()
+        {
+            Vector2 gun_offset = new Vector2(-(origin.X - 3), -(origin.Y +3));
+            Vector2 gun_size = new Vector2(3, getBounds().Height+6);
+            Gun gun1 = new Gun(this, gun_offset, gun_size, "UP");
+            gun1.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            listOfGuns.Add(gun1);
 
+            gun_offset = new Vector2((origin.X - 6), -(origin.Y + 3));
+            gun_size = new Vector2(3, getBounds().Height + 6);
+            Gun gun2 = new Gun(this, gun_offset, gun_size, "UP");
+            gun2.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            listOfGuns.Add(gun2);
+
+            gunsActive = true;
+        }
         
         
     }
