@@ -61,6 +61,7 @@ namespace Physics_Game
         bool stuckTo;
         string shootDirection = "DOWN"; // default shoot down
         List<Bullet> listOfBullets = new List<Bullet>();
+        GraphicsDevice graphicsDevice;
 
         public Gun(Vector2 draw_position, Vector2 vel, string shoot_direction)
         {
@@ -79,20 +80,13 @@ namespace Physics_Game
             size = _size;
         }
 
-        public void LoadContent(GraphicsDevice graphicsDevice, string texture_path)
+        public void LoadContent(GraphicsDevice gDevice, string texture_path)
         {
             using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
             {
-                texture = Texture2D.FromStream(graphicsDevice, fileStream);
+                texture = Texture2D.FromStream(gDevice, fileStream);
             }
-
-            for (int i = 0; i < 50; i++)
-            {
-                Bullet b = new Bullet(new Vector2(0, 0), new Vector2(0, 0));
-                b.LoadContent(graphicsDevice, texture_path);
-                b.shot = false;
-                listOfBullets.Add(b);
-            }
+            graphicsDevice = gDevice;
         }
 
         public void Update(GameTime gameTime)
@@ -127,7 +121,10 @@ namespace Physics_Game
 
         public void ShootBullet()
         {
-
+            Bullet b = new Bullet(new Vector2(0, 0), new Vector2(0, 0));
+            b.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            b.shot = false;
+            listOfBullets.Add(b);
         }
     }
 }
