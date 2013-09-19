@@ -31,7 +31,7 @@ namespace Physics_Game
         /// </summary>
         public override void Initialize()
         {
-            player1 = new Player(new Vector2(StaticVar.ScreenWidth / 2, StaticVar.ScreenHeight - 50), new Vector2(0.01f, 0), new Vector2(50, 10), 50);
+            player1 = new Player(new Vector2(StaticVar.ScreenWidth / 2, StaticVar.ScreenHeight /2), new Vector2(0.01f, 0), new Vector2(50, 10), 50);
 
             base.Initialize();
         }
