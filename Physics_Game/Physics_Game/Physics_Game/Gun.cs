@@ -18,19 +18,21 @@ namespace Physics_Game
     {
         public bool shot { get; set; }
 
-        public Bullet(Vector2 start_position, Vector2 initial_velocity)
+        public Bullet(Vector2 start_position, Vector2 initial_velocity, Vector2 _size)
         {
             position = start_position;
             startPosition = start_position;
-            velocity = velocity;
+            velocity = initial_velocity;
+            size = _size;
         }
 
-        public void LoadContent(GraphicsDevice graphicsDevice, string texture_path)
+        public void LoadContent(Texture2D tex)
         {
-            using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
+            texture = tex;
+            /*using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
             {
                 texture = Texture2D.FromStream(graphicsDevice, fileStream);
-            }
+            }*/
         }
 
         public void Update(GameTime gameTime)
@@ -43,6 +45,15 @@ namespace Physics_Game
             Rectangle r = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
             spriteBatch.Draw(texture, r, null, Color.Pink);
 
+        }
+
+        public bool isOutsideOfScreenBounds()
+        {
+            if (position.X < 0 || position.X > StaticVar.ScreenWidth || position.Y < 0 || position.Y > StaticVar.ScreenHeight)
+            {
+                return true;
+            }
+            return false;
         }
 
 
@@ -102,10 +113,13 @@ namespace Physics_Game
 
             foreach (Bullet b in listOfBullets)
             {
-                if (b.shot)
+
+                b.Update(gameTime);
+                if (b.isOutsideOfScreenBounds())
                 {
-                    b.Update(gameTime);
+                    //listOfBullets.Remove(b);
                 }
+
             }
         }
 
@@ -114,15 +128,20 @@ namespace Physics_Game
             Rectangle r = new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
             spriteBatch.Draw(texture, r, null, Color.Red);
 
+            foreach (Bullet b in listOfBullets)
+            {
+                b.Draw(graphicsDevice, spriteBatch, gameTime);
+
+            }
         }
 
         
 
 
-        public void ShootBullet()
+        public void ShootBullet(Vector2 _vel, Vector2 _size)
         {
-            Bullet b = new Bullet(new Vector2(0, 0), new Vector2(0, 0));
-            b.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            Bullet b = new Bullet(position, _vel, _size);
+            b.LoadContent(texture);
             b.shot = false;
             listOfBullets.Add(b);
         }

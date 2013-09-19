@@ -97,6 +97,7 @@ namespace Physics_Game
             return bounds;
         }
 
+        bool space_pressed = false;
         public void getInput()
         {
 
@@ -146,6 +147,22 @@ namespace Physics_Game
             if (Keyboard.GetState().IsKeyDown(Keys.G))
             {
                 initialiseGuns();
+            }
+
+            if (space_pressed == false)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    foreach (Gun g in listOfGuns)
+                    {
+                        g.ShootBullet(new Vector2(0, -3), new Vector2(3, 6));
+                    }
+                    space_pressed = true;
+                }
+            }
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+            {
+                space_pressed = false;
             }
 
         }
