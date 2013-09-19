@@ -93,8 +93,12 @@ namespace Physics_Game
             graphicsDevice = gDevice;
         }
 
+        float elapsed_time = 0;
         public void Update(GameTime gameTime)
         {
+            elapsed_time += gameTime.ElapsedGameTime.Milliseconds;
+
+            // Update position according to velocity of some kind
             if (stuckTo)
             {
                 position = parentObject.position + drawOffset;
@@ -104,15 +108,34 @@ namespace Physics_Game
                 position += velocity;
             }
 
+            // Update bullets and check whether they need removing (done once every 2 seconds)
+            List<Bullet> to_remove = new List<Bullet>();
+            bool remove_bullets = false;
             foreach (Bullet b in listOfBullets)
             {
-
+                // UPDATE
                 b.Update(gameTime);
-                if (b.isOutsideOfScreenBounds())
+
+                // CHECK
+                if (elapsed_time > 2000)
                 {
-                    //listOfBullets.Remove(b);
+                    if (b.isOutsideOfScreenBounds())
+                    {
+                        to_remove.Add(b);
+                        remove_bullets = true;
+                    }
                 }
 
+            }
+
+            if (remove_bullets)
+            {
+                foreach (Bullet b in to_remove)
+                {
+                    listOfBullets.Remove(b);
+                }
+                to_remove.Clear();
+                elapsed_time = 0;
             }
         }
 

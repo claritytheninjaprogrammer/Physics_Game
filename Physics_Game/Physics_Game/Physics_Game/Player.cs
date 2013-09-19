@@ -42,7 +42,7 @@ namespace Physics_Game
 
         public void Update(GameTime gameTime)
         {
-            getInput();
+            getInput(gameTime);
             CheckCollisionScreenBounds();
            
             position += velocity;
@@ -97,7 +97,8 @@ namespace Physics_Game
         }
 
         bool space_pressed = false;
-        public void getInput()
+        float elapsed_time = 0;
+        public void getInput(GameTime gameTime)
         {
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
@@ -143,9 +144,13 @@ namespace Physics_Game
                 
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.G))
+            if (gunsActive == false)
             {
-                initialiseGuns();
+                if (Keyboard.GetState().IsKeyDown(Keys.G))
+                {
+                    initialiseGuns();
+                    gunsActive = true;
+                }
             }
 
             if (space_pressed == false)
@@ -157,8 +162,22 @@ namespace Physics_Game
                         g.ShootBullet(new Vector2(0, -3), new Vector2(3, 6));
                     }
                     space_pressed = true;
+
                 }
             }
+            else
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    elapsed_time += gameTime.ElapsedGameTime.Milliseconds;
+                }
+                if (elapsed_time > 200.0f)
+                {
+                    space_pressed = false;
+                    elapsed_time = 0;
+                }
+            }
+
             if (Keyboard.GetState().IsKeyUp(Keys.Space))
             {
                 space_pressed = false;
@@ -180,7 +199,6 @@ namespace Physics_Game
             gun2.LoadContent(graphicsDevice, StaticVar.texture);
             listOfGuns.Add(gun2);
 
-            gunsActive = true;
         }
         
         
