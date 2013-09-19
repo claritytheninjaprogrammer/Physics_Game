@@ -32,12 +32,11 @@ namespace Physics_Game
 
         }
 
-        public void LoadContent(GraphicsDevice gDevice, string texture_path)
+        public void LoadContent(Texture2D _tex, GraphicsDevice gDevice)
         {
-            using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
-            {
-                texture = Texture2D.FromStream(gDevice, fileStream);
-            }
+
+            texture = _tex;
+            
             graphicsDevice = gDevice;
         }
 
@@ -172,13 +171,13 @@ namespace Physics_Game
             Vector2 gun_offset = new Vector2(-(origin.X - 3), -(origin.Y +3));
             Vector2 gun_size = new Vector2(3, getBounds().Height+6);
             Gun gun1 = new Gun(this, gun_offset, gun_size, "UP");
-            gun1.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            gun1.LoadContent(graphicsDevice, StaticVar.texture);
             listOfGuns.Add(gun1);
 
             gun_offset = new Vector2((origin.X - 6), -(origin.Y + 3));
             gun_size = new Vector2(3, getBounds().Height + 6);
             Gun gun2 = new Gun(this, gun_offset, gun_size, "UP");
-            gun2.LoadContent(graphicsDevice, @"Content/whitepx.jpg");
+            gun2.LoadContent(graphicsDevice, StaticVar.texture);
             listOfGuns.Add(gun2);
 
             gunsActive = true;

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace Physics_Game
 {
@@ -35,13 +36,21 @@ namespace Physics_Game
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            StaticVar.graphics.PreferredBackBufferWidth = 450;
+            StaticVar.graphics.PreferredBackBufferHeight = 600;
+            StaticVar.graphics.ApplyChanges();
+
             StaticVar.ScreenWidth = StaticVar.graphics.PreferredBackBufferWidth;
             StaticVar.ScreenHeight = StaticVar.graphics.PreferredBackBufferHeight;
 
+            LoadTextures();
+
             StaticVar.playerManager = new PlayerManager(this);
-            
             StaticVar.playerManager.Initialize();
+
             base.Initialize();
+
         }
 
         /// <summary>
@@ -53,7 +62,18 @@ namespace Physics_Game
             // Create a new SpriteBatch, which can be used to draw textures.
             StaticVar.spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+           
+
+        }
+
+        void LoadTextures()
+        {
+            using (FileStream fileStream = new FileStream(@"Content/whitepx.jpg", FileMode.Open))
+            {
+                StaticVar.texture = Texture2D.FromStream(GraphicsDevice, fileStream);
+            }
+
+            //StaticVar.texture =  Content.Load<Texture2D>(@"Content/whitepx.jpg");
         }
 
         /// <summary>

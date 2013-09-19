@@ -20,5 +20,8 @@ namespace Physics_Game
         public static int ScreenHeight;
 
         public static PlayerManager playerManager;
+
+        // Global textures to reduce runtime load content time
+        public static Texture2D texture;
     }
 }

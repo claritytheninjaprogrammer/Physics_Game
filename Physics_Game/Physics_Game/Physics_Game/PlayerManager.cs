@@ -38,7 +38,7 @@ namespace Physics_Game
 
         protected override void LoadContent()
         {
-            player1.LoadContent(GraphicsDevice, @"Content/whitepx.jpg");
+            player1.LoadContent(StaticVar.texture, GraphicsDevice);
 
             base.LoadContent();
         }

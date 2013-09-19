@@ -29,10 +29,6 @@ namespace Physics_Game
         public void LoadContent(Texture2D tex)
         {
             texture = tex;
-            /*using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
-            {
-                texture = Texture2D.FromStream(graphicsDevice, fileStream);
-            }*/
         }
 
         public void Update(GameTime gameTime)
@@ -91,12 +87,9 @@ namespace Physics_Game
             size = _size;
         }
 
-        public void LoadContent(GraphicsDevice gDevice, string texture_path)
+        public void LoadContent(GraphicsDevice gDevice, Texture2D _tex)
         {
-            using (FileStream fileStream = new FileStream(texture_path, FileMode.Open))
-            {
-                texture = Texture2D.FromStream(gDevice, fileStream);
-            }
+            texture = _tex;
             graphicsDevice = gDevice;
         }
 
